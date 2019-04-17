@@ -1,0 +1,133 @@
+
+body {
+    width:100%;
+    min-height:100%;
+}
+
+#content {
+    width:100%;
+    max-width:800px;
+    margin:0 auto;
+    text-align:center;
+}
+
+
+/* =============================================== */
+/* Boxes */
+/* =============================================== */
+
+.box {
+    text-align: center;
+    height: 100px;
+    width: 100px;
+    margin:10px;
+    line-height: 30px;
+    color: white;
+    background-color: #003362;
+    border-color: #003362;
+    font-size: x-large;
+
+}
+.box:hover {
+    background-color: rgb(0, 51, 98, 0.5);
+    border-color: rgb(0, 51, 98, 0.5);
+}
+
+
+/* =============================================== */
+/* Buttons */
+/* =============================================== */
+
+.btn-primary{
+	background-color: rgb(0, 51, 98, 1);
+    border-color: rgb(0, 51, 98, 1);
+}
+.btn-primary:hover{
+    background-color: rgb(0, 51, 98, 0.5);
+}
+.btn-primary:checked {
+    background-color: black;
+}
+
+.flash-button{
+	background: rgb(0, 51, 98, 1);;
+	padding:5px 10px;
+	color:#fff;
+	border:none;
+	border-radius:5px;
+
+	animation-name: flash;
+	animation-duration: 1.5s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+
+	//Firefox 1+
+	-webkit-animation-name: flash;
+	-webkit-animation-duration: 1.5s;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation-iteration-count: infinite;
+
+	//Safari 3-4
+	-moz-animation-name: flash;
+	-moz-animation-duration: 1.5s;
+	-moz-animation-timing-function: linear;
+	-moz-animation-iteration-count: infinite;
+}
+
+@keyframes flash {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1.0; }
+}
+
+//Firefox 1+
+@-webkit-keyframes flash {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1.0; }
+}
+
+//Safari 3-4
+@-moz-keyframes flash {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1.0; }
+}
+
+
+
+
+/* =============================================== */
+/* Radio Input with Buttons */
+/* =============================================== */
+
+label.btn {
+    line-height: 0.7em;
+    background: none;
+    border: none;
+}
+
+input[type=radio]:checked ~ label.btn {
+    background-color: #e6e6e6;
+}
+
+
+
+.center {
+    text-align: center;
+}
+
+
+.chart {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color:#656565;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+}
+.chart:after, :before {
+    box-sizing: border-box;
+}

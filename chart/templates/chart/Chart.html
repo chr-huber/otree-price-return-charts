@@ -1,0 +1,420 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+{% load i18n %}
+
+
+{#--- STYLES ---------------------------------------------------------------------------------------------------------#}
+
+{% block styles %}
+    <link href="{% static 'chart/css/custom.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+
+
+{#--- CONTENT --------------------------------------------------------------------------------------------------------#}
+
+{% block title %}
+      Month {{ page }} / 6
+{% endblock %}
+
+{% block content %}
+
+    {% if page is not 0 %}
+
+    <!-- Return display -->
+        <div style="width:5%; float:left; text-align: right; margin-bottom: 0px; background: #656565; color: #656565;">.</div>
+        <div style="width:10%; float:left; text-align: right; margin-bottom: 0px; background: #656565; color: #e3e3e3">
+            Return
+        </div>
+        <div id="return" style="width: 12.5%; float:left; text-align: center; margin-bottom: 0px; background: #656565;" class="btn-light"> . </div>
+
+    <!-- Price display -->
+        <div style="width:5%; float:left; text-align: right; margin-bottom: 0px; background: #656565; color: #656565;">.</div>
+        <div style="width:10%; float:left; text-align: right; margin-bottom: 0px; background: #656565; color: #e3e3e3">
+            Price
+        </div>
+        <div id="price" style="width: 12.5%; float:left; text-align: center; margin-bottom: 0px; background: #656565;" class="btn-light"> . </div>
+        <div style="width:10%; float:left; text-align: right; margin-bottom: 0px; background: #656565; color: #656565;">.</div>
+
+        <div style="width:35%; float:right; text-align: center; margin-bottom: 0px; background: #656565; color: #e3e3e3">
+            History
+        </div>
+
+    <!-- Chart -->
+        <div class="chart" style="width: 65%; height: 380px; float:left">
+            <div id="container" style="height: 350px;"></div>
+        </div>
+
+    <!-- History Table -->
+        <div id="history" style="width: 35%; height: 380px; float:right; background-color: #656565; color: #e6e6e6">
+            <table class="table table-responsive center small">
+                <tr>
+                    <td>
+                        Month
+                    </td>
+                    <td>
+                        Initial wealth
+                    </td>
+                    <td>
+                        Percentage in risky asset
+                    </td>
+                    <td>
+                        End wealth
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="margin-left: 45%; margin-right:45%; text-align: center; padding-top: 5pt">
+            <div id="start" class="btn btn-primary flash-button">Start Month {{ page }}</div>
+        </div>
+
+    {% endif %}
+
+    <!-- Next Button -->
+    <div id="nextbutton" style="margin-left: 45%; text-align: right; padding-top:5px; visibility: visible;">
+        {% next_button %}
+    </div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+    <script>
+
+        var data1 = {{ returns|json }};
+        var data2 = {{ prices|json }};
+        var page = {{ page|json }}-1;
+
+        var init_number_returns;
+        if (page == 0) {
+            init_number_returns = 30 * page
+        }
+        else {
+            init_number_returns = 30 * page + 1
+        }
+
+        var chart = Highcharts.chart('container', {
+
+            chart: {
+            //    type: 'area'
+                type: 'column',
+                backgroundColor: '#656565'
+            },
+
+            credits: {enabled: false},
+            legend: {enabled: false},
+            title: {text: ''},
+            //  tooltip: {enabled: true},
+            tooltip: {
+                shared: true,
+                useHTML: true,
+                headerFormat: '<small>Day {point.key}</small><table>',
+                pointFormat: '<tr><td>Return: </td>' + '<td style="text-align: right"><b>{point.y}%</b></td></tr>',
+                footerFormat: '</table>',
+                valueDecimals: 2
+            },
+            plotOptions: {
+                series: {
+                      name: "Returns",
+                      borderWidth: 0.05,
+                      pointWidth: 1.5, // Defaults to 0.1
+                      groupPadding: 0,
+                      animation: false,
+                      color: 'rgb(251, 139, 30)'
+                }
+            },
+
+            xAxis: {
+                title: {
+                    text: 'Day',
+                    style: {
+                        color: '#f8f9fa'
+                    }
+                },
+              min: -2,
+//              max: 365,
+              max: 185,
+              tickInterval: 30,
+              gridLineWidth: 0,
+              minorGridLineWidth: 0,
+              lineWidth:0.5,
+              lineColor:"gray",
+                labels: {
+                    style: {
+                        color: '#f8f9fa'
+                    }
+                },
+                plotLines: [{
+                    color: 'gray',
+                    width: 2,
+                    value: 30
+                },
+                {
+                    color: 'gray',
+                    width: 2,
+                    value: 60
+                },
+                {
+                    color: 'gray',
+                    width: 2,
+                    value: 90
+                },
+                {
+                    color: 'gray',
+                    width: 2,
+                    value: 120
+                },
+                {
+                    color: 'gray',
+                    width: 2,
+                    value: 150
+                },
+                {
+                    color: 'gray',
+                    width: 2,
+                    value: 180
+                },
+{% comment %}
+                {
+                    color: 'gray',
+                    width: 2,
+                    value: 210
+                },
+                {
+                    color: 'gray',
+                    width: 2,
+                    value: 240
+                },
+                {
+                    color: 'gray',
+                    width: 2,
+                    value: 270
+                },
+                {
+                    color: 'gray',
+                    width: 2,
+                    value: 300
+                },
+                {
+                    color: 'gray',
+                    width: 2,
+                    value: 330
+                },
+                {
+                    color: 'gray',
+                    width: 2,
+                    value: 360
+                }
+{% endcomment %}
+                ],
+                              },
+
+            yAxis: {
+                title: {
+                    text: 'Daily Return (in %)',
+                    style: {
+                        color: '#f8f9fa'
+                    }
+                },
+                //min: -3,
+                //max: 3,
+                tickPositioner: function() {
+                  var positions = [],
+                    ext = this.getExtremes(),
+                    yMax = Math.round(ext.max),
+                    yMin = Math.round(ext.min),
+                    dMax = Math.ceil(ext.dataMax),
+                    dMin = Math.floor(ext.dataMin);
+
+                    NegDiff = Math.floor(dMin);
+                    PosDiff = Math.ceil(dMax);
+
+                    if (Math.abs(NegDiff) < PosDiff){
+                      if (PosDiff == 0) {
+                        increment = .5;
+                      }
+                      else {
+                        increment = PosDiff/4;
+                      }
+
+                      while (PosDiff % increment != 0) {
+                        increment+=.5;
+                      }
+                      for (var tick = - PosDiff; tick <= PosDiff; tick+=increment) {
+                        positions.push(tick);
+                      }
+                    }
+                    else if (Math.abs(NegDiff) >= PosDiff){
+                      if (NegDiff == 0) {
+                        increment = .5;
+                      }
+                      else {
+                        increment = Math.abs(NegDiff)/4;
+                      }
+
+                      while (Math.abs(NegDiff) % increment != 0) {
+                        increment+=.5;
+                      }
+                      for (var tick = NegDiff; tick <= -NegDiff; tick+=increment) {
+                        positions.push(tick);
+                      }
+                    }
+
+                    return positions;
+                  },
+                // tickInterval: 0.5,
+                plotLines: [{
+                    color: '#f8f9fa',
+                    width: 2.5,
+                    value: 0
+                }],
+                labels: {
+                    style: {
+                        color: '#f8f9fa'
+                    }
+                },
+            },
+
+            series: [{
+                data: data1.slice(0,init_number_returns)
+            }]
+
+        });
+
+
+        var i = 0;
+
+        var time_per_return = {{ Constants.time_per_return|json }};
+        var number_of_returns
+        if (page == 0) {
+            number_of_returns = 31
+        }
+        else {
+            number_of_returns = 30;
+        }
+
+        function UpdateReturns(){
+            return1 = parseFloat(Math.round(data1.slice(init_number_returns, (number_of_returns+1)*(page+1))[i]*100)/100).toFixed(2);
+            document.getElementById("return").innerHTML = return1 + " %";
+            if (return1 < 0) {
+                document.getElementById("return").style.background = "#ff433d";
+                setTimeout(function(){
+//                    document.getElementById("return").style.background = "#f8f9fa";
+                    document.getElementById("return").style.background = "#656565";
+                    document.getElementById("return").style.color = "#e6e6e6";
+                }, 100)
+            }
+            if (return1 > 0) {
+//                document.getElementById("return").style.background = "#33ff00";
+                document.getElementById("return").style.background = "#1dcc92";
+                setTimeout(function(){
+                    document.getElementById("return").style.background = "#656565";
+                    document.getElementById("return").style.color = "#e6e6e6";
+                }, 100)
+            }
+            if (return1 = 0) {
+                document.getElementById("return").style.background = "#656565";
+                document.getElementById("return").style.color = "#e6e6e6";
+            }
+        }
+        function UpdatePrices(){
+            price1 = Math.round(data2.slice(init_number_returns, (number_of_returns+1)*(page+1))[i]*100)/100;
+            return1 = Math.round(data1.slice(init_number_returns, (number_of_returns+1)*(page+1))[i]*100)/100;
+            document.getElementById("price").innerHTML = price1;
+            if (return1 < 0) {
+                document.getElementById("price").style.background = "#ff433d";
+                setTimeout(function(){
+//                    document.getElementById("return").style.background = "#f8f9fa";
+                    document.getElementById("price").style.background = "#656565";
+                    document.getElementById("price").style.color = "#e6e6e6";
+                }, 100)
+            }
+            if (return1 > 0) {
+//                document.getElementById("return").style.background = "#33ff00";
+                document.getElementById("price").style.background = "#1dcc92";
+                setTimeout(function(){
+                    document.getElementById("price").style.background = "#656565";
+                    document.getElementById("price").style.color = "#e6e6e6";
+                }, 100)
+            }
+            if (return1 = 0) {
+                document.getElementById("price").style.background = "#656565";
+                document.getElementById("price").style.color = "#e6e6e6";
+            }
+        }
+
+        $('#start').click(function () {
+
+            document.getElementById("start").style.visibility = "hidden";
+
+            var interval = setInterval(function () {
+                chart.series[0].addPoint(data1.slice(init_number_returns, (number_of_returns+1)*(page+1))[i], true, false, true);
+                UpdateReturns();
+                UpdatePrices();
+                i += 1;
+            }, time_per_return);
+
+            setTimeout(function() {
+                clearInterval(interval);
+                }, time_per_return*number_of_returns);
+
+            setTimeout(function(){
+                {% if page is not num_pages %}
+                    document.getElementById("input").style.visibility = "visible";
+                {% endif %}
+                document.getElementById("nextbutton").style.visibility = "visible";
+                document.getElementById("end_wealth1").style.visibility = "visible";
+                document.getElementById("end_wealth2").style.visibility = "visible";
+                document.getElementById("end_wealth3").style.visibility = "visible";
+                document.getElementById("end_wealth4").style.visibility = "visible";
+                document.getElementById("end_wealth5").style.visibility = "visible";
+                document.getElementById("end_wealth6").style.visibility = "visible";
+            }, time_per_return*number_of_returns+500);
+
+        });
+
+        $('next_button').click(function () {
+            document.getElementById("investment").disabled = "false";
+        });
+
+    </script>
+
+    <script>
+      function updateTextInput(val) {
+            document.getElementById('textInput').value=val;
+          }
+      function updateRangeInput(val) {
+            document.getElementById('rangeInput').value=val;
+          }
+      function validateTextInput(){
+        if (parseFloat(document.getElementById('textInput').value) < 0) {
+          document.getElementById('textInput').value = 0;
+        }
+        if (parseFloat(document.getElementById('textInput').value) > 100) {
+          document.getElementById('textInput').value = 100;
+        }
+      }
+    </script>
+
+    <script>
+      function validateConfidenceIntervals() {
+            fc = parseFloat(document.getElementById('fc').value),
+              fc_p05 = parseFloat(document.getElementById('fc_p05').value),
+              fc_p95 = parseFloat(document.getElementById('fc_p95').value);
+            if (fc_p05 > fc_p95) {
+              window.alert("Your pessimistic estimate has to be equal or lower than your optimistic estimate.");
+              document.getElementById('fc_p95').value = "";
+            }
+            if (fc < fc_p05 || fc > fc_p95) {
+              window.alert("Your point estimate has to be within your pessimistic and optimistic estimates.");
+              document.getElementById('fc_p95').value = "";
+            }
+          }
+    </script>
+
+{% endblock %}
