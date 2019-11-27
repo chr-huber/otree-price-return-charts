@@ -16,7 +16,7 @@ class Chart(Page):
     ]
 
     def is_displayed(self):
-        return self.player.id_in_group == 1
+        return self.player.id_in_group == 3
 
     def vars_for_template(self):
         return {
@@ -45,7 +45,7 @@ class Chart1(Page):
     ]
 
     def is_displayed(self):
-        return self.player.id_in_group == 2
+        return self.player.id_in_group == 1 or self.player.id_in_group == 2
 
     def vars_for_template(self):
         return {
